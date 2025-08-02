@@ -2,11 +2,11 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { createClient } from '@/lib/supabase/client' // Corrected import
+import { createClient } from '@/utils/supabase/client'
 
 export default function LoginPage() {
   const router = useRouter()
-  const supabase = createClient() // Create client by calling the function
+  const supabase = createClient()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
@@ -24,7 +24,7 @@ export default function LoginPage() {
       setError(error.message)
     } else {
       router.push('/dashboard')
-      router.refresh() // Refresh to ensure the new session is picked up by the server
+      router.refresh()
     }
   }
 
@@ -81,12 +81,4 @@ export default function LoginPage() {
 
           <button
             type="submit"
-            className="w-full py-2 px-4 bg-purple-600 hover:bg-purple-700 rounded-md text-white font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
-          >
-            Sign In
-          </button>
-        </form>
-      </div>
-    </main>
-  );
-}
+            className="w-full py-2 px-4 bg-
