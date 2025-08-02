@@ -1,17 +1,16 @@
 import { redirect } from 'next/navigation'
-import { createClient } from '@/lib/supabase/server'
+import { createClient } from '@/utils/supabase/server'
 import DashboardClient from './DashboardClient'
 import { addDays } from 'date-fns'
 
 export default async function DashboardPage() {
-  const supabase = createClient() // Corrected
+  const supabase = createClient()
 
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) {
     redirect('/')
   }
 
-  // ... rest of the file is the same ...
   const to = new Date()
   const from = addDays(to, -29)
   const { data: initialMetrics } = await supabase
