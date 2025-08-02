@@ -12,7 +12,8 @@ export async function GET() {
     )
   }
 
-  const supabase = createClient()
+  // THE FIX IS HERE: We destructure `supabase` from the returned object.
+  const { supabase } = createClient()
 
   // 1. Get all clients from your new 'clients' table
   const { data: clients, error: clientError } = await supabase
