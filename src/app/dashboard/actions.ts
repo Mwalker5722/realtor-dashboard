@@ -2,8 +2,8 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
-import { revalidatePath } from 'next/cache' // 1. Import revalidatePath
 
 const dateRangeSchema = z.object({
   from: z.date(),
@@ -11,16 +11,20 @@ const dateRangeSchema = z.object({
 })
 
 export async function getMetricsForDateRange(range: { from: Date; to: Date }) {
-  const parsedRange = dateRangeSchema.safeParse(range);
+  const parsedRange = dateRangeSchema.safeParse(range)
   if (!parsedRange.success) {
-    throw new Error("Invalid date range provided.");
+    throw new Error('Invalid date range provided.')
   }
-  
-  const supabase = createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+
+  // THE FIX IS HERE: We destructure `supabase` from the returned object.
+  const { supabase } = createClient()
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
 
   if (!user) {
-    throw new Error("User not authenticated.");
+    throw new Error('User not authenticated.')
   }
 
   const { data, error } = await supabase
@@ -31,10 +35,10 @@ export async function getMetricsForDateRange(range: { from: Date; to: Date }) {
     .lte('report_date', parsedRange.data.to.toISOString())
 
   if (error) {
-    console.error("Error fetching metrics:", error)
-    throw new Error("Could not fetch metrics.");
+    console.error('Error fetching metrics:', error)
+    throw new Error('Could not fetch metrics.')
   }
 
-  revalidatePath('/dashboard') // 2. Add this line to clear the cache
+  revalidatePath('/dashboard')
   return data
 }
