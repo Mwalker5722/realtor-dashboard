@@ -81,4 +81,13 @@ export default function LoginPage() {
 
           <button
             type="submit"
-            className="w-full py-2 px-4 bg-
+            // This className was incomplete. This is the corrected, full version.
+            className="w-full py-2 px-4 bg-purple-600 hover:bg-purple-700 rounded-md text-white font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+          >
+            Sign In
+          </button>
+        </form>
+      </div>
+    </main>
+  );
+}
