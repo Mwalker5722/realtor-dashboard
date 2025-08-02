@@ -5,10 +5,13 @@ import DashboardClient from './DashboardClient'
 import { addDays } from 'date-fns'
 
 export default async function DashboardPage() {
-  const supabase = createClient()
+  // THE FIX IS HERE: We destructure `supabase` from the returned object.
+  const { supabase } = createClient()
 
   // Check for an active user session
-  const { data: { user } } = await supabase.auth.getUser()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
   if (!user) {
     redirect('/')
   }
@@ -25,10 +28,6 @@ export default async function DashboardPage() {
 
   return (
     <div className="flex justify-center w-full min-h-screen bg-gray-100 p-4 md:p-8">
-      {/*
-        The main layout is now simpler. We pass the user's email
-        and the initial data to the interactive client component.
-      */}
       <DashboardClient
         userEmail={user.email || 'No email found'}
         initialMetrics={initialMetrics || []}
