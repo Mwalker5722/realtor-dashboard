@@ -1,22 +1,17 @@
-// src/app/dashboard/page.tsx
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import DashboardClient from './DashboardClient'
 import { addDays } from 'date-fns'
 
 export default async function DashboardPage() {
-  // THE FIX IS HERE: We destructure `supabase` from the returned object.
-  const { supabase } = createClient()
+  const supabase = createClient() // Corrected
 
-  // Check for an active user session
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  const { data: { user } } = await supabase.auth.getUser()
   if (!user) {
     redirect('/')
   }
 
-  // Fetch initial data for the last 30 days
+  // ... rest of the file is the same ...
   const to = new Date()
   const from = addDays(to, -29)
   const { data: initialMetrics } = await supabase
